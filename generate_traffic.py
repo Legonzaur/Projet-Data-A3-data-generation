@@ -1,16 +1,32 @@
-test_matrix = [
-    [0,1,0,0],
-    [1,0,1,0],
-    [0,1,0,1],
-    [0,0,1,0]
+import copy
+import pprint
+import random
+
+initial_matrix = [
+    [None,1,None,None],
+    [1,None,1,None],
+    [None,1,None,1],
+    [None,None,None,None]
 ]
 
+temp_matrix = copy.deepcopy(initial_matrix)
+
+def generate_traffic():
+    rand = random.randint(1,10)
+    return rand
+
 def browse_matrix(matrix):
+    output = copy.deepcopy(matrix)
+    #Iterate through matrix
     for ligneIndex, ligne in enumerate(matrix):
         for colonneIndex, case in enumerate(ligne):
-             print(ligneIndex, colonneIndex, case)
+            #If connection is present
+            if case == 1:
+                output[ligneIndex][colonneIndex] = generate_traffic()
+                #If connection is bidirectional
+                if matrix[colonneIndex][ligneIndex] == 1:
+                    matrix[colonneIndex][ligneIndex] = None
+                    output[colonneIndex][ligneIndex] = output[ligneIndex][colonneIndex]
+    return output
 
-
-
-
-generate_traffic(test_matrix)
+pprint.pprint(browse_matrix(temp_matrix))
