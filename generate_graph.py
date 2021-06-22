@@ -80,9 +80,9 @@ def generate_graph(min_node_amount, max_node_amount, min_neighbor_amount, max_ne
     return generate_edges(generate_nodes(min_node_amount, max_node_amount), min_neighbor_amount, max_neighbor_amount,
                           uni_direct_ratio)
 
+## EXAMPLES ##
+# graph = generate_graph(10, 20, 2, 6, 0.25)
+# pp.pprint(graph)
 
-graph = generate_graph(10, 20, 2, 6, 0.25)
-pp.pprint(graph)
-
-for node in range(len(graph)):
-    print("Node " + str(node) + " has " + str(count_neighbors(graph, node)) + " neighbors")
+# for node in range(len(graph)):
+#     print("Node " + str(node) + " has " + str(count_neighbors(graph, node)) + " neighbors")
