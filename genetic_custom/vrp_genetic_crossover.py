@@ -39,7 +39,6 @@ def crossover(population, amount):
             first_parent[split_point:chomosoms_length]
 
         yield first_child, second_child
-    return
 
 
-pprint.pprint(crossover([[1, 2, 3, 4, 5, 6], [0, 0, 0, 0, 0, 0]], 2))
+pprint.pprint(list(crossover([[1, 2, 3, 4, 5, 6], [0, 0, 0, 0, 0, 0]], 2)))
