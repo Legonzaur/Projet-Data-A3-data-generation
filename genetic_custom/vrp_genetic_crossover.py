@@ -1,12 +1,12 @@
 import random
 import math
-import pprint
+import copy
 # On a une graphe à 5 nodes et 8 arêtes
 
 
 def get_random_chromosom_pair(population):
     random_list = random.sample(range(0, len(population)), 2)
-    return population[random_list[0]], population[random_list[1]]
+    return copy.deepcopy(population[random_list[0]]), copy.deepcopy(population[random_list[1]])
 
 
 def crossover(population, amount):
@@ -23,10 +23,10 @@ def crossover(population, amount):
         first_parent, second_parent = get_random_chromosom_pair(population)
         # Génération du point de séparation pour la génération des enfants
         split_point = random.randint(1, chromosoms_length-1)
-        # Génération des deux enfants
-        first_child = first_parent[0:split_point] + \
-            second_parent[split_point:chromosoms_length]
-        second_child = second_parent[0:split_point] + \
-            first_parent[split_point:chromosoms_length]
+        # Génération de l'enfant
+        cut_part = first_parent[split_point:chromosoms_length]
+        for i in cut_part:
+            second_parent.pop(second_parent.index(i))
 
-        yield first_child, second_child
+        random.shuffle(cut_part)
+        yield second_parent + cut_part
