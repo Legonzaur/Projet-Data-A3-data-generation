@@ -1,16 +1,5 @@
-import sys
 import random
 import copy
-import pprint
-# On a une grapue à 5 nodes et 8 arêtes
-
-vrp = [
-    [None, 3, 9, 7, 6],
-    [3, None, 1, 2, 8],
-    [9, 1, None, 1, 4],
-    [7, 2, 1, None, 5],
-    [6, 8, 4, 5, None]
-]
 
 
 def get_random_chromosom(population):
@@ -36,6 +25,3 @@ def mutation(population, amount):
         target[swap1] = target[swap2]
         target[swap2] = temp
         yield target
-
-
-print(list(mutation([[1, 2, 3, 4, 5, 6]], 1)))

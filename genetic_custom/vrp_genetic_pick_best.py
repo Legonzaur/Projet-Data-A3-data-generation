@@ -1,9 +1,4 @@
-import sys
-import random
-import math
 from genetic_custom.vrp_genetic_get_cost import get_gene_cost
-
-# On a une grapue à 5 nodes et 8 arêtes
 
 
 def get_best_chromosoms(population, amount):

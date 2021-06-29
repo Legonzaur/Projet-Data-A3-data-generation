@@ -1,16 +1,7 @@
-import sys
 import random
 import math
 import pprint
 # On a une graphe à 5 nodes et 8 arêtes
-
-vrp = [
-    [None, 3, 9, 7, 6],
-    [3, None, 1, 2, 8],
-    [9, 1, None, 1, 4],
-    [7, 2, 1, None, 5],
-    [6, 8, 4, 5, None]
-]
 
 
 def get_random_chromosom_pair(population):
@@ -39,6 +30,3 @@ def crossover(population, amount):
             first_parent[split_point:chromosoms_length]
 
         yield first_child, second_child
-
-
-pprint.pprint(list(crossover([[1, 2, 3, 4, 5, 6], [0, 0, 0, 0, 0, 0]], 2)))
