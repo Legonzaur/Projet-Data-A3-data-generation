@@ -12,4 +12,6 @@ vrp = [
     [6, 8, 4, 5, None]
 ]
 
+
+#
 # Premièrement, on lit le VRP
