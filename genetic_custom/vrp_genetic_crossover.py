@@ -25,18 +25,18 @@ def crossover(population, amount):
         raise Exception(
             "crossover amount must be even (pair of children and parents)")
 
-    chomosoms_length = len(population[0])
+    chromosoms_length = len(population[0])
     # Création de paires d'enfants à partir des parents
     for x in range(math.floor(amount/2)):
         # Obtention des deux parents de manière aléatoire
         first_parent, second_parent = get_random_chromosom_pair(population)
         # Génération du point de séparation pour la génération des enfants
-        split_point = random.randint(1, chomosoms_length-1)
+        split_point = random.randint(1, chromosoms_length-1)
         # Génération des deux enfants
         first_child = first_parent[0:split_point] + \
-            second_parent[split_point:chomosoms_length]
+            second_parent[split_point:chromosoms_length]
         second_child = second_parent[0:split_point] + \
-            first_parent[split_point:chomosoms_length]
+            first_parent[split_point:chromosoms_length]
 
         yield first_child, second_child
 
