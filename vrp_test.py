@@ -21,7 +21,7 @@ initial_population_count = 4
 crossover_chance = 0.5
 mutation_chance = 0.25
 random_chance = 0.25
-
+iterations = 10
 
 # Création de la population intiale
 for i in range(4):
@@ -30,30 +30,34 @@ for i in range(4):
 # Création des enfants
 children = []
 
-# Création des crossover
-crossover_amount = math.floor(crossover_chance*initial_population_count)
-for i in range(crossover_amount):
-    children += list(crossover(population, crossover_amount))
+for iterate in range(iterations):
+    # Création des crossover
+    crossover_amount = math.floor(crossover_chance*initial_population_count)
+    for i in range(crossover_amount):
+        children += list(crossover(population, crossover_amount))
 
+    # Création des mutations
+    mutation_amount = math.floor(mutation_chance*initial_population_count)
+    for i in range(mutation_amount):
+        children += list(mutation(population, mutation_amount))
 
-# Création des mutations
-mutation_amount = math.floor(mutation_chance*initial_population_count)
-for i in range(mutation_amount):
-    children += list(mutation(population, mutation_amount))
+    # Obtention des solutions aléatoires
+    random_amount = math.floor(random_chance*initial_population_count)
+    for i in range(random_amount):
+        children.append(generate_gene(matrix))
 
+    # Election des gènes les plus forts
+    next_gen = get_best_chromosoms(
+        population + children, initial_population_count, matrix)
 
-# Obtention des solutions aléatoires
-random_amount = math.floor(random_chance*initial_population_count)
-for i in range(random_amount):
-    children.append(generate_gene(matrix))
+    pprint.pprint(population)
+    pprint.pprint(
+        list(map(lambda item: get_gene_cost(matrix, item), population)))
+    pprint.pprint(children)
+    pprint.pprint(
+        list(map(lambda item: get_gene_cost(matrix, item), children)))
+    pprint.pprint(next_gen)
+    pprint.pprint(
+        list(map(lambda item: get_gene_cost(matrix, item), next_gen)))
 
-# Election des gènes les plus forts
-next_gen = get_best_chromosoms(
-    population + children, initial_population_count, matrix)
-
-pprint.pprint(population)
-pprint.pprint(list(map(lambda item: get_gene_cost(matrix, item), population)))
-pprint.pprint(children)
-pprint.pprint(list(map(lambda item: get_gene_cost(matrix, item), children)))
-pprint.pprint(next_gen)
-pprint.pprint(list(map(lambda item: get_gene_cost(matrix, item), next_gen)))
+    population = next_gen
