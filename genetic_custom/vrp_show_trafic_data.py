@@ -6,8 +6,6 @@ import pandas as pd
 import numpy as np
 import statsmodels.api as sm
 import statsmodels.stats.api as sms
-from scipy import stats
-import pylab as py
 
 # define the client, the database, and the collection
 # the database and the collection are created at first insert 
@@ -17,6 +15,7 @@ db = client["DataProject"]
 collection_trafic = db['vehicles']
 vehicles_stamped = db['vehicles_stamped']
 
+
 vehicules_par_arete = list(db.vehicles_stamped.aggregate([
     {"$project":{"num_arete":1, "heures":{"$hour":"$date"}, "nb_vehicules":1}}, #SOLUTION
     {"$match":{"heures":{"$lte":9, "$gte":7}}}, #SOLUTION
@@ -24,6 +23,8 @@ vehicules_par_arete = list(db.vehicles_stamped.aggregate([
                "nb_vehicules":{"$avg":"$nb_vehicules"}}}, #SOLUTION
     {"$sort":{"nb_vehicules":-1}} #SOLUTION
 ]))
+print("Le résultat retourné par la requete (max,median,min):")
+print(vehicules_par_arete[0], vehicules_par_arete[249], vehicules_par_arete[-1])
 
 arete_mediane = vehicules_par_arete[249]["_id"]
 arete_max, arete_min = vehicules_par_arete[0]["_id"], vehicules_par_arete[-1]["_id"]
@@ -96,27 +97,6 @@ ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M')) #SOLUTION
 ax.set(title="Trafic de l'arete la moins congestionnée.", xlabel="temps", ylabel="trafic") #SOLUTION
 ax.plot(xs,ys,"o") #SOLUTION
 
-plt.show()
-
-
-# En premier lieu le modèle devra etre entrainé avant de l'évaluer
-# Les données au format date sont converties en minutes
-X = [(date.hour-7)*60+date.minute for date in xs]
-# Ajout de la colonne correspondant à la constante
-X = \
-    np.append(arr = np.ones((len(X), 1)).astype(int), values = np.array([X]).T, axis = 1) #SOLUTION
-# Entrainement du modèle
-regressor_OLS = \
-    sm.OLS(endog = ys, exog = X).fit() #SOLUTION
-# Predictions avec le modèle
-y_pred = \
-    regressor_OLS.params[0]+regressor_OLS.params[1]*X[:,1] #SOLUTION
-
-# Affichage des résidus
-fig, ax = plt.subplots()
-ax.scatter(X[:,1], #Les résidus
-           regressor_OLS.resid, alpha=0.3)
-ax.set(title="Résidus de la régression linéaire.", xlabel="Temps", ylabel="Residus")
 plt.show()
 
 
