@@ -11,13 +11,15 @@ class Graph:
     def generate_nodes(self, min_node_amount, max_node_amount):
         node_amount = random.randint(min_node_amount, max_node_amount)
         graph = []
+        connected_graphs = []
         for i in range(node_amount):
             graph.append([])
-            self.connected_graphs.append([i])
+            connected_graphs.append([i])
             for _ in range(node_amount):
                 graph[i].append(None)
 
         self.matrix = graph
+        self.connected_graphs = connected_graphs
         return graph
 
     # count the neighbors of a node
