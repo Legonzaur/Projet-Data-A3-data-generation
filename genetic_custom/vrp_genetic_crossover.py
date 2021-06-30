@@ -17,7 +17,7 @@ def crossover(population, amount):
             "crossover amount must be even (pair of children and parents)")
 
     chromosoms_length = len(population[0])
-    # Création de paires d'enfants à partir des parents
+    # Création de l'enfant à partir des parents
     for x in range(math.floor(amount/2)):
         # Obtention des deux parents de manière aléatoire
         first_parent, second_parent = get_random_chromosom_pair(population)
