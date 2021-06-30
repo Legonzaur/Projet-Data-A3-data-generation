@@ -62,6 +62,20 @@ axes[1].plot(xs,ys,"o") #SOLUTION
 fig.suptitle('Trafic moyen au matin et au soir.')
 plt.show()
 
+
+
+vehicules_par_arete = list(db.vehicles_stamped.aggregate([
+    {"$project":{"num_arete":1, "heures":{"$hour":"$date"}, "nb_vehicules":1}}, #SOLUTION
+    {"$match":{"heures":{"$lte":9, "$gte":7}}}, #SOLUTION
+    {"$group":{"_id":"$num_arete",  #SOLUTION
+               "nb_vehicules":{"$avg":"$nb_vehicules"}}}, #SOLUTION
+    {"$sort":{"nb_vehicules":-1}} #SOLUTION
+]))
+print("Le résultat retourné par la requete (max,median,min):")
+print(vehicules_par_arete[0], vehicules_par_arete[249], vehicules_par_arete[-1])
+
+
+
 def generate_gene(vrp):
     a = list(range(1, len(vrp)))
     random.shuffle(a)
