@@ -8,6 +8,8 @@ class Traffic:
     congestion_table = [0.05, 0.1, 0.1, 0.05, 0.05, 0.2, 0.6, 0.9, 1, 0.7,
                         0.5, 0.7, 0.9, 0.9, 0.7, 0.5, 0.7, 0.9, 1, 0.7, 0.5, 0.4, 0.3, 0.1]
 
+    graph = None
+
     def __init__(self, graph):
         self.graph = graph
 
@@ -38,17 +40,3 @@ class Traffic:
                         output[target_index][source_node] = output[source_node][target_index]
 
         return output
-
-
-# initial_matrix = [
-#     [None, 1, None, None],
-#     [1, None, 1, None],
-#     [None, 1, None, 1],
-#     [None, None, None, None]
-# ]
-# temp_matrix = copy.deepcopy(initial_matrix)
-# _graph = Graph()
-# _graph.generate_graph()
-# _traffic = Traffic(_graph)
-# pprint(_graph.matrix)
-# pprint(_traffic.browse_matrix())
