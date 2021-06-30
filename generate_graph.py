@@ -64,7 +64,7 @@ class Graph:
                 self.generate_link(source_node, target_node, random.random() > uni_direct_ratio)
 
     # generate individual edge
-    def generate_link(self, source_node, target_node, bi_direct):
+    def generate_link(self, source_node, target_node, bi_direct=True):
         # add the source -> target link
         self.matrix[source_node][target_node] = 1
 
@@ -81,17 +81,17 @@ class Graph:
             self.matrix[target_node][source_node] = 1
 
     def find_in_array_array(self, array, value):
-        for i in range(len(array)):
-            if isinstance(array[i], list):
-                idx = [i, self.find_in_array_array(array[i], value)]
+        for key, val in enumerate(array):
+            if isinstance(val, list):
+                idx = [key, self.find_in_array_array(val, value)]
                 if idx[- 1] is not None:
                     return idx
-            if array[i] == value:
-                return i
+            if val == value:
+                return key
 
     # generate a complete graph
-    def generate_graph(self, min_node_amount, max_node_amount, min_neighbor_amount, max_neighbor_amount,
-                       uni_direct_ratio):
+    def generate_graph(self, min_node_amount=10, max_node_amount=10, min_neighbor_amount=2, max_neighbor_amount=4,
+                       uni_direct_ratio=0.1):
         self.generate_nodes(min_node_amount, max_node_amount)
         self.generate_edges(min_neighbor_amount, max_neighbor_amount, uni_direct_ratio)
 
