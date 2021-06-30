@@ -1,7 +1,5 @@
 import copy
-from pprint import pprint
 import random
-from generate_graph import Graph
 
 
 class Traffic:
