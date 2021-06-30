@@ -1,42 +1,54 @@
 import copy
-import pprint
+from pprint import pprint
 import random
-import generate_graph as gg
+from generate_graph import Graph
 
 
-initial_matrix = [
-    [None, 1, None, None],
-    [1, None, 1, None],
-    [None, 1, None, 1],
-    [None, None, None, None]
-]
+class Traffic:
+    congestion_table = [0.05, 0.1, 0.1, 0.05, 0.05, 0.2, 0.6, 0.9, 1, 0.7,
+                        0.5, 0.7, 0.9, 0.9, 0.7, 0.5, 0.7, 0.9, 1, 0.7, 0.5, 0.4, 0.3, 0.1]
 
-congestion_table = [0.05, 0.1, 0.1, 0.05, 0.05, 0.2, 0.6, 0.9, 1, 0.7,
-                    0.5, 0.7, 0.9, 0.9, 0.7, 0.5, 0.7, 0.9, 1, 0.7, 0.5, 0.4, 0.3, 0.1]
+    def __init__(self, graph):
+        self.graph = graph
 
-temp_matrix = copy.deepcopy(initial_matrix)
+    def generate_traffic(self, source, target):
+        traffic_table = [
+            round(
+                congestion * random.randint(100, 1000) * (
+                        (self.graph.count_neighbors(source) + self.graph.count_neighbors(target))
+                        / 2),
+                2
+            ) for congestion in self.congestion_table
+        ]
+
+        return traffic_table
+
+    def browse_matrix(self):
+        matrix = self.graph.matrix
+        output = copy.deepcopy(matrix)
+        # Iterate through matrix
+        for source_node, target_links in enumerate(matrix):
+            for target_index, link in enumerate(target_links):
+                # If connection is present
+                if link == 1:
+                    output[source_node][target_index] = self.generate_traffic(source_node, target_index)
+                    # If connection is bidirectional
+                    if matrix[target_index][source_node] == 1:
+                        matrix[target_index][source_node] = None
+                        output[target_index][source_node] = output[source_node][target_index]
+
+        return output
 
 
-def generate_traffic(graph, source, target):
-    traffic_table = [round(congestion * random.randint(10, 100) * ((gg.count_neighbors(
-        graph, source) + gg.count_neighbors(graph, target)) / 2), 2) for congestion in congestion_table]
-    return traffic_table
-
-
-def browse_matrix(matrix):
-    output = copy.deepcopy(matrix)
-    # Iterate through matrix
-    for ligneIndex, ligne in enumerate(matrix):
-        for colonneIndex, case in enumerate(ligne):
-            # If connection is present
-            if case == 1:
-                output[ligneIndex][colonneIndex] = generate_traffic(
-                    matrix, ligneIndex, colonneIndex)
-                # If connection is bidirectional
-                if matrix[colonneIndex][ligneIndex] == 1:
-                    matrix[colonneIndex][ligneIndex] = None
-                    output[colonneIndex][ligneIndex] = output[ligneIndex][colonneIndex]
-    return output
-
-
-pprint.pprint(browse_matrix(temp_matrix))
+# initial_matrix = [
+#     [None, 1, None, None],
+#     [1, None, 1, None],
+#     [None, 1, None, 1],
+#     [None, None, None, None]
+# ]
+# temp_matrix = copy.deepcopy(initial_matrix)
+# _graph = Graph()
+# _graph.generate_graph()
+# _traffic = Traffic(_graph)
+# pprint(_graph.matrix)
+# pprint(_traffic.browse_matrix())
