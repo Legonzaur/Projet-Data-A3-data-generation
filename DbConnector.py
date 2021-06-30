@@ -29,7 +29,7 @@ class DbConnector:
             "source_node": source_node,
             "target_node": target_node,
         }
-        return self.db_data[collection].find(search_filter)
+        return self.db_data[collection].find_one(search_filter)
 
     def save_traffic(self, graph_id, source_node, target_node, traffic_data, collection="traffic"):
         traffic = {
@@ -45,7 +45,8 @@ class DbConnector:
         for source_node, targets in enumerate(graph):
             for target_node, link_weight in enumerate(targets):
                 if link_weight is not None:
-                    graph[source_node][target_node] = self.get_traffic(graph_id, source_node, target_node, traffic_collection)["data"]
+                    traffic_data = self.get_traffic(graph_id, source_node, target_node, traffic_collection)
+                    graph[source_node][target_node] = traffic_data["data"]
 
         return graph
 
