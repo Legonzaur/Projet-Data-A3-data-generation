@@ -280,9 +280,3 @@ print("Proportion de succes associee aux t-tests ",
           )/nb_regression_models for j in range(nb_regressors)])
 print("Proportion de succes associee aux f-tests ", sum(cpts_f)/nb_regression_models)
 print("Tous les tests sont completees.")
-
-
-def generate_gene(vrp):
-    a = list(range(1, len(vrp)))
-    random.shuffle(a)
-    return a
