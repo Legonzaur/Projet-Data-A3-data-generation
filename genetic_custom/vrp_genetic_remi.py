@@ -8,6 +8,8 @@ import statsmodels.api as sm
 import statsmodels.stats.api as sms
 from scipy import stats
 import pylab as py
+from statsmodels.graphics import tsaplots
+
 
 # define the client, the database, and the collection
 # the database and the collection are created at first insert 
@@ -117,6 +119,37 @@ fig, ax = plt.subplots()
 ax.scatter(X[:,1], #Les résidus
            regressor_OLS.resid, alpha=0.3)
 ax.set(title="Résidus de la régression linéaire.", xlabel="Temps", ylabel="Residus")
+plt.show()
+
+print("Test d'homogeneite (H0 : La variance des residus est homogène)")
+print('p valeur de Goldfeld–Quandt test est: ',
+      sms.het_goldfeldquandt(ys, regressor_OLS.model.exog)[1]) #SOLUTION
+print('p valeur of Breusch–Pagan test est: ', 
+        sms.het_breuschpagan(regressor_OLS.resid, #SOLUTION
+        regressor_OLS.model.exog)[1]) #SOLUTION
+print('p valeur de White test est: ', 
+      sms.het_white(regressor_OLS.resid**2, #SOLUTION 
+      regressor_OLS.model.exog)[1]) #SOLUTION
+
+sm.qqplot(regressor_OLS.resid_pearson, line ='45') #SOLUTION
+py.show() #SOLUTION
+
+
+
+
+# Affichage de la fonction d'autocorrelation
+fig = tsaplots.plot_acf(regressor_OLS.resid, lags=40) #SOLUTION
+plt.show()
+
+print("Resultat du test d'auto-correlation (H0 : pas d'autocorrelation)")
+print(sm.stats.acorr_ljungbox(regressor_OLS.resid, return_df=True)) #SOLUTION
+
+fig, ax = plt.subplots()
+# Affichage du nuage de point
+ax.scatter(X[:,1], ys, alpha=0.3) #SOLUTION
+ax.set(title="Régression linéaire l'arete la moins congéstionnée.", xlabel="Temps", ylabel="Trafic")
+# Affichage du nuage de point
+ax.plot(X[:,1], y_pred, linewidth=3) #SOLUTION
 plt.show()
 
 
