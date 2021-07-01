@@ -1,13 +1,14 @@
 # On a une grapue à 5 nodes et 8 arêtes
 import pprint
 import math
+
 from genetic_custom.vrp_genetic_generate_gene import generate_gene
 from genetic_custom.vrp_genetic_crossover import crossover
 from genetic_custom.vrp_genetic_mutation import mutation
 from genetic_custom.vrp_genetic_pick_best import get_best_chromosoms
 from genetic_custom.vrp_genetic_pick_best import get_gene_cost
 
-from DbConnector import DbConnector
+from db.db_connector import DbConnector
 
 db = DbConnector()
 matrix = db.get_random_graph()
