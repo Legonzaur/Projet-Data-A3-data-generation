@@ -21,83 +21,83 @@ collection_trafic = db['vehicles']
 vehicles_stamped = db['vehicles_stamped']
 
 vehicules_par_arete = list(db.vehicles_stamped.aggregate([
-    {"$project":{"num_arete":1, "heures":{"$hour":"$date"}, "nb_vehicules":1}}, #SOLUTION
-    {"$match":{"heures":{"$lte":9, "$gte":7}}}, #SOLUTION
-    {"$group":{"_id":"$num_arete",  #SOLUTION
-               "nb_vehicules":{"$avg":"$nb_vehicules"}}}, #SOLUTION
-    {"$sort":{"nb_vehicules":-1}} #SOLUTION
+    {"$project":{"num_arete":1, "heures":{"$hour":"$date"}, "nb_vehicules":1}},
+    {"$match":{"heures":{"$lte":9, "$gte":7}}},
+    {"$group":{"_id":"$num_arete", 
+               "nb_vehicules":{"$avg":"$nb_vehicules"}}},
+    {"$sort":{"nb_vehicules":-1}}
 ]))
 
 arete_mediane = vehicules_par_arete[249]["_id"]
 arete_max, arete_min = vehicules_par_arete[0]["_id"], vehicules_par_arete[-1]["_id"]
 vehicules_arete_mediane = db.vehicles_stamped.aggregate([
-    {"$match":{"num_arete":{"$eq":arete_mediane}}}, #SOLUTION
-    {"$project":{"temps":{"heures":{"$hour":"$date"}, #SOLUTION
-                          "minutes":{"$minute":"$date"}}, #SOLUTION
-                "nb_vehicules":1}}, #SOLUTION
-    {"$match":{"temps.heures":{"$lte":9, "$gte":7}}}, #SOLUTION
-     {"$sort":{"temps":1}}]) #SOLUTION
+    {"$match":{"num_arete":{"$eq":arete_mediane}}},
+    {"$project":{"temps":{"heures":{"$hour":"$date"},
+                          "minutes":{"$minute":"$date"}},
+                "nb_vehicules":1}},
+    {"$match":{"temps.heures":{"$lte":9, "$gte":7}}},
+     {"$sort":{"temps":1}}])
 vehicules_arete_max = db.vehicles_stamped.aggregate([
-    {"$match":{"num_arete":{"$eq":arete_max}}}, #SOLUTION
-    {"$project":{"temps":{"heures":{"$hour":"$date"}, #SOLUTION
-                          "minutes":{"$minute":"$date"}}, #SOLUTION
-                "nb_vehicules":1}}, #SOLUTION
-    {"$match":{"temps.heures":{"$lte":9, "$gte":7}}}, #SOLUTION
-     {"$sort":{"temps":1}}]) #SOLUTION
+    {"$match":{"num_arete":{"$eq":arete_max}}},
+    {"$project":{"temps":{"heures":{"$hour":"$date"},
+                          "minutes":{"$minute":"$date"}},
+                "nb_vehicules":1}},
+    {"$match":{"temps.heures":{"$lte":9, "$gte":7}}},
+     {"$sort":{"temps":1}}])
 vehicules_arete_min = db.vehicles_stamped.aggregate([
-    {"$match":{"num_arete":{"$eq":arete_min}}}, #SOLUTION
-    {"$project":{"temps":{"heures":{"$hour":"$date"}, #SOLUTION 
-                          "minutes":{"$minute":"$date"}}, #SOLUTION
-                "nb_vehicules":1}}, #SOLUTION
-    {"$match":{"temps.heures":{"$lte":9, "$gte":7}}}, #SOLUTION
-     {"$sort":{"temps":1}}]) #SOLUTION
+    {"$match":{"num_arete":{"$eq":arete_min}}},
+    {"$project":{"temps":{"heures":{"$hour":"$date"}, 
+                          "minutes":{"$minute":"$date"}},
+                "nb_vehicules":1}},
+    {"$match":{"temps.heures":{"$lte":9, "$gte":7}}},
+     {"$sort":{"temps":1}}])
 
 # Traitements relatif a l'arete la plus congestionnée
 # Extraction des dates
 xs = \
-    pd.date_range("2020-01-01 07:01", "2020-01-01 09:00", freq = "min").to_pydatetime().tolist()#SOLUTION
+    pd.date_range("2020-01-01 07:01", "2020-01-01 09:00", freq = "min").to_pydatetime().tolist(
 # Duplication des dates sur les 5 jours
 xs = \
-    [e for sub in zip(xs, xs, xs, xs, xs) for e in sub] #SOLUTION 
+    [e for sub in zip(xs, xs, xs, xs, xs) for e in sub] 
 # Données de trafic pour l'arete la plus congestionnée
 trafics = \
-    [trafic["nb_vehicules"] for trafic in vehicules_arete_max] #SOLUTION
+    [trafic["nb_vehicules"] for trafic in vehicules_arete_max]
 # Données matinales
 ys = \
-    trafics[:600] #SOLUTION
+    trafics[:600]
 # Affichage relatif a l'arete la plus congestionnée
-fig, ax = plt.subplots() #SOLUTION
-ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1)) #SOLUTION
-ax.xaxis.set_minor_locator(mdates.MinuteLocator(interval = 15)) #SOLUTION
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M')) #SOLUTION
-ax.set(title="Trafic de l'arete la plus congestionnée.", xlabel="temps", ylabel="trafic") #SOLUTION
-ax.plot(xs,ys,"o") #SOLUTION
+fig, ax = plt.subplots()
+ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1))
+ax.xaxis.set_minor_locator(mdates.MinuteLocator(interval = 15))
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+ax.set(title="Trafic de l'arete la plus congestionnée.", xlabel="temps", ylabel="trafic")
+ax.plot(xs,ys,"o")
 
 # Traitements relatif a l'arete médiane
 trafics = \
-    [trafic["nb_vehicules"] for trafic in vehicules_arete_mediane] #SOLUTION
+    [trafic["nb_vehicules"] for trafic in vehicules_arete_mediane]
 ys = \
-    trafics[:600] #SOLUTION
+    trafics[:600]
 # Affichage relatif a l'arete médiane
-fig, ax = plt.subplots() #SOLUTION
-ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1)) #SOLUTION
-ax.xaxis.set_minor_locator(mdates.MinuteLocator(interval = 15)) #SOLUTION
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M')) #SOLUTION
-ax.set(title="Trafic de l'arete la moins congestionnée.", xlabel="temps", ylabel="trafic") #SOLUTION
-ax.plot(xs,ys,"o") #SOLUTION
+fig, ax = plt.subplots()
+ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1))
+ax.xaxis.set_minor_locator(mdates.MinuteLocator(interval = 15))
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+ax.set(title="Trafic de l'arete la moins congestionnée.", xlabel="temps", ylabel="trafic")
+ax.plot(xs,ys,"o")
 
 # Traitements relatif a l'arete la moins congestionnée
 trafics = \
-    [trafic["nb_vehicules"] for trafic in vehicules_arete_min] #SOLUTION
+    [trafic["nb_vehicules"] for trafic in vehicules_arete_min]
 ys = \
-    trafics[:600] #SOLUTION
+    trafics[:600]
 # Affichage relatif a l'arete la moins congestionnée
-fig, ax = plt.subplots() #SOLUTION
-ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1)) #SOLUTION
-ax.xaxis.set_minor_locator(mdates.MinuteLocator(interval = 15)) #SOLUTION
-ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M')) #SOLUTION
-ax.set(title="Trafic de l'arete la moins congestionnée.", xlabel="temps", ylabel="trafic") #SOLUTION
-ax.plot(xs,ys,"o") #SOLUTION
+fig, ax = plt.subplots()
+ax.xaxis.set_major_locator(mdates.HourLocator(interval = 1))
+ax.xaxis.set_minor_locator(mdates.MinuteLocator(interval = 15))
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+ax.set(title="Trafic de l'arete la moins congestionnée.", xlabel="temps", ylabel="trafic")
+ax.plot(xs,ys,"o")
 
 plt.show()
 
@@ -107,13 +107,13 @@ plt.show()
 X = [(date.hour-7)*60+date.minute for date in xs]
 # Ajout de la colonne correspondant à la constante
 X = \
-    np.append(arr = np.ones((len(X), 1)).astype(int), values = np.array([X]).T, axis = 1) #SOLUTION
+    np.append(arr = np.ones((len(X), 1)).astype(int), values = np.array([X]).T, axis = 1)
 # Entrainement du modèle
 regressor_OLS = \
-    sm.OLS(endog = ys, exog = X).fit() #SOLUTION
+    sm.OLS(endog = ys, exog = X).fit()
 # Predictions avec le modèle
 y_pred = \
-    regressor_OLS.params[0]+regressor_OLS.params[1]*X[:,1] #SOLUTION
+    regressor_OLS.params[0]+regressor_OLS.params[1]*X[:,1]
 
 # Affichage des résidus
 fig, ax = plt.subplots()
@@ -124,88 +124,88 @@ plt.show()
 
 print("Test d'homogeneite (H0 : La variance des residus est homogène)")
 print('p valeur de Goldfeld–Quandt test est: ',
-      sms.het_goldfeldquandt(ys, regressor_OLS.model.exog)[1]) #SOLUTION
+      sms.het_goldfeldquandt(ys, regressor_OLS.model.exog)[1])
 print('p valeur of Breusch–Pagan test est: ', 
-        sms.het_breuschpagan(regressor_OLS.resid, #SOLUTION
-        regressor_OLS.model.exog)[1]) #SOLUTION
+        sms.het_breuschpagan(regressor_OLS.resid,
+        regressor_OLS.model.exog)[1])
 print('p valeur de White test est: ', 
-      sms.het_white(regressor_OLS.resid**2, #SOLUTION 
-      regressor_OLS.model.exog)[1]) #SOLUTION
+      sms.het_white(regressor_OLS.resid**2, 
+      regressor_OLS.model.exog)[1])
 
-sm.qqplot(regressor_OLS.resid_pearson, line ='45') #SOLUTION
-py.show() #SOLUTION
+sm.qqplot(regressor_OLS.resid_pearson, line ='45')
+py.show()
 
 
 
 
 # Affichage de la fonction d'autocorrelation
-fig = tsaplots.plot_acf(regressor_OLS.resid, lags=40) #SOLUTION
+fig = tsaplots.plot_acf(regressor_OLS.resid, lags=40)
 plt.show()
 
 print("Resultat du test d'auto-correlation (H0 : pas d'autocorrelation)")
-print(sm.stats.acorr_ljungbox(regressor_OLS.resid, return_df=True)) #SOLUTION
+print(sm.stats.acorr_ljungbox(regressor_OLS.resid, return_df=True))
 
 fig, ax = plt.subplots()
 # Affichage du nuage de point
-ax.scatter(X[:,1], ys, alpha=0.3) #SOLUTION
+ax.scatter(X[:,1], ys, alpha=0.3)
 ax.set(title="Régression linéaire l'arete la moins congéstionnée.", xlabel="Temps", ylabel="Trafic")
 # Affichage du nuage de point
-ax.plot(X[:,1], y_pred, linewidth=3) #SOLUTION
+ax.plot(X[:,1], y_pred, linewidth=3)
 plt.show()
 
 
 print("Evaluation de la regression lineaire en utilisant la classe statsmodels :")
 print("Les parametres de la regression sont ", 
-      regressor_OLS.params) #SOLUTION
+      regressor_OLS.params)
 print("La valeur du R2 est ", 
-      regressor_OLS.rsquared) #SOLUTION
-print("Les test de Fischer sur la qualite globale de la regression ") #SOLUTION
+      regressor_OLS.rsquared)
+print("Les test de Fischer sur la qualite globale de la regression ")
 print("f_value ", 
-      regressor_OLS.fvalue, #SOLUTION
+      regressor_OLS.fvalue,
       " f_pvalue",
-      regressor_OLS.f_pvalue) #SOLUTION
+      regressor_OLS.f_pvalue)
 print("Le resultat des t-tests ")
 print("p valeurs ", 
-      regressor_OLS.pvalues, #SOLUTION 
+      regressor_OLS.pvalues, 
       " t valeurs ", 
-      regressor_OLS.tvalues) #SOLUTION
+      regressor_OLS.tvalues)
 
 print("\nEvaluation de la regression en utilisant les formules : ")
 # Calcul manuel des paramètres de la regression
 slope = \
-    np.sum(np.multiply(X[:,1] - np.mean(X[:,1]), #SOLUTION 
-                           ys - np.mean(ys)))/np.sum((X[:,1] - np.mean(X[:,1]))**2) #SOLUTION
+    np.sum(np.multiply(X[:,1] - np.mean(X[:,1]), 
+                           ys - np.mean(ys)))/np.sum((X[:,1] - np.mean(X[:,1]))**2)
 intercept = \
-    np.mean(ys)-slope*np.mean(X[:,1]) #SOLUTION
+    np.mean(ys)-slope*np.mean(X[:,1])
 print("Terme constant et pente ", intercept, slope)
 
 # Calcul de la statistique de fischer pour evaluer la regression
 n_obs, k = len(X[:,1]), 1
 # somme des ecarts expliques
 sce = \
-    np.sum((y_pred-np.mean(ys))**2) #SOLUTION
+    np.sum((y_pred-np.mean(ys))**2)
 # sommes des ecarts totaux
 sct = \
-    np.sum((ys-np.mean(ys))**2) #SOLUTION
+    np.sum((ys-np.mean(ys))**2)
 # somme des ecarts residuels
 scr = \
     sct-sce
 F = \
-    (sce/k)/(scr/(n_obs-k-1)) #SOLUTION
+    (sce/k)/(scr/(n_obs-k-1))
 print("Le coefficient de R2 ", sce/sct)
 print("Valeur du F-test ", F)
 
-se_x = np.sum((X[:,1] - np.mean(X[:,1]))**2) #SOLUTION
-temp = (1/n_obs + np.mean(X[:,1])**2 / se_x) #SOLUTION
-ecart_type0 = np.sqrt((scr/(n_obs-k-1)) * temp) #SOLUTION
+se_x = np.sum((X[:,1] - np.mean(X[:,1]))**2)
+temp = (1/n_obs + np.mean(X[:,1])**2 / se_x)
+ecart_type0 = np.sqrt((scr/(n_obs-k-1)) * temp)
 t0 = \
-    intercept/ecart_type0 #SOLUTION
+    intercept/ecart_type0
 print("Valeur de t0 ", t0)
 
-ecart_type1 = np.sqrt( #SOLUTION
-    (scr/(n_obs-k-1)) / se_x) #SOLUTION
+ecart_type1 = np.sqrt(
+    (scr/(n_obs-k-1)) / se_x)
 t1 = \
-    slope/ecart_type1 #SOLUTION
+    slope/ecart_type1
 print("Valeur du t1 ", t1)
 
 
@@ -248,10 +248,10 @@ for i in range(nb_regression_models):
     
     # Ajout de la constante dans la matrice
     X = \
-        np.append(arr = np.ones((X.shape[0], 1)), values = X, axis = 1) #SOLUTION
+        np.append(arr = np.ones((X.shape[0], 1)), values = X, axis = 1)
     # Entrainement du modèle
     regression_models[i] = \
-        sm.OLS(endog = ys, exog = X).fit() #SOLUTION
+        sm.OLS(endog = ys, exog = X).fit()
 # seuil des tests
 seuil = 0.05
 # nombre de variables par modèle
@@ -263,10 +263,10 @@ cpts_f = [0]*nb_regression_models
 for i in range(nb_regression_models):
     # Les p-valeurs des t-tests
     pvalues_t_test = \
-        regression_models[i].pvalues #SOLUTION
+        regression_models[i].pvalues
     # Les p-valeurs des F-tests
     pvalue_f_test = \
-        regression_models[i].f_pvalue #SOLUTION
+        regression_models[i].f_pvalue
     for j in range(len(pvalues_t_test)):
         if pvalues_t_test[j] < seuil:
             cpts_ts[i][j] += 1
