@@ -38,3 +38,11 @@ class Traffic:
                         output[target_index][source_node] = output[source_node][target_index]
 
         return output
+
+# EXAMPLE #
+# graph = Graph()
+# graph.generate_graph(1000, 1000, 1, 2, 0.1)
+#
+# traffic = Traffic(graph)
+# matrix = traffic.browse_matrix()
+# print(matrix)
