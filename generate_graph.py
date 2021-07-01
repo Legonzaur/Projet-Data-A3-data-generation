@@ -72,14 +72,14 @@ class Graph:
         src_idx = self.find_in_array_array(self.connected_graphs, source_node)
         trg_idx = self.find_in_array_array(self.connected_graphs, target_node)
 
-        if src_idx[0] is not trg_idx[0]:
-            self.connected_graphs[src_idx[0]] += self.connected_graphs[trg_idx[0]]
-            self.connected_graphs[src_idx[0]].sort()
-            self.connected_graphs.pop(trg_idx[0])
-
         # if bidirectional, add the target -> source link
         if bi_direct:
             self.matrix[target_node][source_node] = 1
+            # because otherwise it's not always connected
+            if src_idx[0] is not trg_idx[0]:
+                self.connected_graphs[src_idx[0]] += self.connected_graphs[trg_idx[0]]
+                self.connected_graphs[src_idx[0]].sort()
+                self.connected_graphs.pop(trg_idx[0])
 
     def find_in_array_array(self, array, value):
         for key, val in enumerate(array):
