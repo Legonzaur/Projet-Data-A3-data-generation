@@ -1,7 +1,7 @@
 @echo off
 
 :loop
-CALL START python vrp_test.py
+python vrp_test.py
 
 if %ERRORLEVEL% EQU 0 (
    goto loop
