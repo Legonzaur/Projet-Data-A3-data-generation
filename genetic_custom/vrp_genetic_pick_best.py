@@ -1,13 +1,29 @@
 from functools import cmp_to_key
+import math
+from graph_tools.pathfinding import weightFinding
 
 
 def get_gene_cost(matrix, gene, initial=0):
     current = initial
-    cost = 0
+    cost = 0.0
     for i in gene:
-        cost += matrix[current][i]
+        if(matrix[current][i] == None):
+            matrix[current][i] = [None]*24
+            matrix[current][i][math.floor(cost/3600) % 24] = weightFinding(
+                matrix, current, i, math.floor(cost/3600) % 24)
+
+        if matrix[current][i][math.floor(cost/3600) % 24] == None:
+            test = weightFinding(
+                matrix, current, i, math.floor(cost/3600) % 24)
+            print(test)
+        cost += matrix[current][i][math.floor(cost/3600) % 24]
         current = i
-    return cost + matrix[current][initial]
+
+    if(matrix[current][initial] == None):
+        matrix[current][initial] = [None]*24
+        matrix[current][initial][math.floor(cost/3600) % 24] = weightFinding(
+            matrix, current, initial, math.floor(cost/3600) % 24)
+    return cost + matrix[current][initial][math.floor(cost/3600) % 24]
 
 
 def get_best_chromosoms(population, amount, matrix):
