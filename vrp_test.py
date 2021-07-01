@@ -7,16 +7,10 @@ from genetic_custom.vrp_genetic_mutation import mutation
 from genetic_custom.vrp_genetic_pick_best import get_best_chromosoms
 from genetic_custom.vrp_genetic_pick_best import get_gene_cost
 
-from generate_graph import Graph
-from generate_traffic import Traffic
+from DbConnector import DbConnector
 
-_graph = Graph()
-_graph.generate_graph(10, 10)
-_traffic = Traffic(_graph)
-# pprint(_graph.matrix)
-# pprint(_traffic.browse_matrix())
-
-matrix = _traffic.browse_matrix()
+db = DbConnector()
+matrix = db.get_random_graph()
 
 
 population = []
