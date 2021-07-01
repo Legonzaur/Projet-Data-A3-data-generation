@@ -1,4 +1,4 @@
-from db_connector import DbConnector
+from db.db_connector import DbConnector
 from graph_tools.generate_graph import Graph
 from graph_tools.generate_traffic import Traffic
 
