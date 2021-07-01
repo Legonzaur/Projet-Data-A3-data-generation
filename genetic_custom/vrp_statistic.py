@@ -9,7 +9,8 @@ import statsmodels.stats.api as sms
 from scipy import stats
 import pylab as py
 from statsmodels.graphics import tsaplots
-
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
 
 # define the client, the database, and the collection
 # the database and the collection are created at first insert 
@@ -151,6 +152,134 @@ ax.set(title="Régression linéaire l'arete la moins congéstionnée.", xlabel="
 # Affichage du nuage de point
 ax.plot(X[:,1], y_pred, linewidth=3) #SOLUTION
 plt.show()
+
+
+print("Evaluation de la regression lineaire en utilisant la classe statsmodels :")
+print("Les parametres de la regression sont ", 
+      regressor_OLS.params) #SOLUTION
+print("La valeur du R2 est ", 
+      regressor_OLS.rsquared) #SOLUTION
+print("Les test de Fischer sur la qualite globale de la regression ") #SOLUTION
+print("f_value ", 
+      regressor_OLS.fvalue, #SOLUTION
+      " f_pvalue",
+      regressor_OLS.f_pvalue) #SOLUTION
+print("Le resultat des t-tests ")
+print("p valeurs ", 
+      regressor_OLS.pvalues, #SOLUTION 
+      " t valeurs ", 
+      regressor_OLS.tvalues) #SOLUTION
+
+print("\nEvaluation de la regression en utilisant les formules : ")
+# Calcul manuel des paramètres de la regression
+slope = \
+    np.sum(np.multiply(X[:,1] - np.mean(X[:,1]), #SOLUTION 
+                           ys - np.mean(ys)))/np.sum((X[:,1] - np.mean(X[:,1]))**2) #SOLUTION
+intercept = \
+    np.mean(ys)-slope*np.mean(X[:,1]) #SOLUTION
+print("Terme constant et pente ", intercept, slope)
+
+# Calcul de la statistique de fischer pour evaluer la regression
+n_obs, k = len(X[:,1]), 1
+# somme des ecarts expliques
+sce = \
+    np.sum((y_pred-np.mean(ys))**2) #SOLUTION
+# sommes des ecarts totaux
+sct = \
+    np.sum((ys-np.mean(ys))**2) #SOLUTION
+# somme des ecarts residuels
+scr = \
+    sct-sce
+F = \
+    (sce/k)/(scr/(n_obs-k-1)) #SOLUTION
+print("Le coefficient de R2 ", sce/sct)
+print("Valeur du F-test ", F)
+
+se_x = np.sum((X[:,1] - np.mean(X[:,1]))**2) #SOLUTION
+temp = (1/n_obs + np.mean(X[:,1])**2 / se_x) #SOLUTION
+ecart_type0 = np.sqrt((scr/(n_obs-k-1)) * temp) #SOLUTION
+t0 = \
+    intercept/ecart_type0 #SOLUTION
+print("Valeur de t0 ", t0)
+
+ecart_type1 = np.sqrt( #SOLUTION
+    (scr/(n_obs-k-1)) / se_x) #SOLUTION
+t1 = \
+    slope/ecart_type1 #SOLUTION
+print("Valeur du t1 ", t1)
+
+
+
+# Nombre d'aretes dans la ville
+nb_aretes = 500
+# Nombre de modèles
+nb_regression_models = 250
+# Nombre d'aretes pris en charge par chaque modèle
+nb_aretes_per_model = nb_aretes/ nb_regression_models
+# Les modèles de regression
+regression_models = [None]*nb_regression_models
+for i in range(nb_regression_models):
+    #print(i)
+    num_premiere_arete, num_derniere_arete = i*nb_aretes_per_model, (i+1)*nb_aretes_per_model-1 
+    # Lecture des données du trafic matinales sur les aretes dans l'intervalle
+    # [num_premiere_arete, num_derniere_arete]
+    X = list(db.vehicules_stamped.aggregate([
+        {"$match":{"num_arete":{"$gte":num_premiere_arete, "$lte":num_derniere_arete}}},
+        {"$project":{"temps":{"heures":{"$hour":"$date"}, 
+                              "minutes":{"$minute":"$date"}},
+                    "nb_vehicules":1,"num_arete":1}},
+        {"$match":{"temps.heures":{"$lte":9, "$gte":7}}}]))
+    # Conversion en minutes des données de trafic
+    X = [[trafic["num_arete"],
+                60*(trafic["temps"]["heures"]-7)+trafic["temps"]["minutes"], 
+                trafic["nb_vehicules"]] for trafic in X]
+    # Transformation de la colone "num_arete" en colonne binaire associée à chaque arete
+    ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [0])], 
+                           remainder="passthrough")
+    X = ct.fit_transform(X)
+    if isinstance(X, np.ndarray) is False:
+        X = X.toarray()
+    else :
+        X = np.array(X, dtype = int)
+   # Vecteur du trafic réel par arete et par minute
+    ys = X[:,-1]
+    # Matrice contenant l'échantillon des données, les colonnes sont la minute et l'arete
+    X = X[:, 1:-1]
+    
+    # Ajout de la constante dans la matrice
+    X = \
+        np.append(arr = np.ones((X.shape[0], 1)), values = X, axis = 1) #SOLUTION
+    # Entrainement du modèle
+    regression_models[i] = \
+        sm.OLS(endog = ys, exog = X).fit() #SOLUTION
+# seuil des tests
+seuil = 0.05
+# nombre de variables par modèle
+nb_regressors = int(nb_aretes_per_model+1)
+# Compteur du nombre de t-tests concluant de l'effet des variables par modèle
+cpts_ts = [[0]*nb_regressors for i in range(nb_regression_models)]
+# Compteur du nombre de F-tests conclusifs sur les modèles
+cpts_f = [0]*nb_regression_models
+for i in range(nb_regression_models):
+    # Les p-valeurs des t-tests
+    pvalues_t_test = \
+        regression_models[i].pvalues #SOLUTION
+    # Les p-valeurs des F-tests
+    pvalue_f_test = \
+        regression_models[i].f_pvalue #SOLUTION
+    for j in range(len(pvalues_t_test)):
+        if pvalues_t_test[j] < seuil:
+            cpts_ts[i][j] += 1
+            #print("p-valeur associee a la variable "+str(j)+" est "+str(pvalues_t_test [j]))
+    if pvalue_f_test < seuil:
+        cpts_f[i] += 1
+        #print("p-valeur du f-test est "+str(pvalue_f_test))
+print("Proportion de succes associee aux t-tests ", 
+      [sum(
+              [cpts_ts[i][j] for i in range(nb_regression_models)]
+          )/nb_regression_models for j in range(nb_regressors)])
+print("Proportion de succes associee aux f-tests ", sum(cpts_f)/nb_regression_models)
+print("Tous les tests sont completees.")
 
 
 def generate_gene(vrp):
