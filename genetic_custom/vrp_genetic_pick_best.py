@@ -15,7 +15,8 @@ def get_gene_cost(matrix, gene, initial=0):
         if matrix[current][i][math.floor(cost/3600) % 24] == None:
             test = weightFinding(
                 matrix, current, i, math.floor(cost/3600) % 24)
-            print(test)
+            if test == None:
+                raise Exception("Graph is not connected")
         cost += matrix[current][i][math.floor(cost/3600) % 24]
         current = i
 

@@ -1,7 +1,7 @@
 # On a une grapue à 5 nodes et 8 arêtes
 import pprint
 import math
-from genetic_custom.vrp_genetic_remi import generate_gene
+from genetic_custom.vrp_genetic_generate_gene import generate_gene
 from genetic_custom.vrp_genetic_crossover import crossover
 from genetic_custom.vrp_genetic_mutation import mutation
 from genetic_custom.vrp_genetic_pick_best import get_best_chromosoms
@@ -11,7 +11,7 @@ from generate_graph import Graph
 from generate_traffic import Traffic
 
 _graph = Graph()
-_graph.generate_graph(50, 50)
+_graph.generate_graph(10, 10)
 _traffic = Traffic(_graph)
 # pprint(_graph.matrix)
 # pprint(_traffic.browse_matrix())
@@ -20,13 +20,13 @@ matrix = _traffic.browse_matrix()
 
 
 population = []
-initial_population_count = 10
+initial_population_count = 4
 random_chance = 1/initial_population_count
 mutation_chance = 4/initial_population_count
 crossover_chance = 1-(random_chance+mutation_chance)
 
 
-iterations = 500
+iterations = 50
 
 # Création de la population intiale
 for i in range(initial_population_count):
