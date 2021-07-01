@@ -1,5 +1,6 @@
-from pymongo import MongoClient
+import random
 import copy
+from pymongo import MongoClient
 
 
 class DbConnector:
@@ -64,3 +65,7 @@ class DbConnector:
                     self.save_traffic(graph_id, source_node, target_node, link, traffic_collection)
 
         return graph_id
+
+    def get_random_graph(self, graph_collection="graphs", traffic_collection="traffic"):
+        graph_id = random.choice(list(self.db_data[graph_collection].find()))["_id"]
+        return self.get_graph_with_traffic(graph_id, graph_collection, traffic_collection)
