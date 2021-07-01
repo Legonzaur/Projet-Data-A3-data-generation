@@ -1,36 +1,40 @@
 # On a une grapue à 5 nodes et 8 arêtes
 import pprint
 import math
-from genetic_custom.vrp_genetic_remi import generate_gene
+from genetic_custom.vrp_genetic_generate_gene import generate_gene
 from genetic_custom.vrp_genetic_crossover import crossover
 from genetic_custom.vrp_genetic_mutation import mutation
 from genetic_custom.vrp_genetic_pick_best import get_best_chromosoms
 from genetic_custom.vrp_genetic_pick_best import get_gene_cost
 
+from generate_graph import Graph
+from generate_traffic import Traffic
 
-matrix = [
-    [None, 3, 9, 7, 6],
-    [3, None, 1, 2, 8],
-    [9, 1, None, 1, 4],
-    [7, 2, 1, None, 5],
-    [6, 8, 4, 5, None]
-]
+_graph = Graph()
+_graph.generate_graph(10, 10)
+_traffic = Traffic(_graph)
+# pprint(_graph.matrix)
+# pprint(_traffic.browse_matrix())
+
+matrix = _traffic.browse_matrix()
+
 
 population = []
 initial_population_count = 4
-crossover_chance = 0.5
-mutation_chance = 0.25
-random_chance = 0.25
-iterations = 10
+random_chance = 1/initial_population_count
+mutation_chance = 4/initial_population_count
+crossover_chance = 1-(random_chance+mutation_chance)
+
+
+iterations = 50
 
 # Création de la population intiale
-for i in range(4):
+for i in range(initial_population_count):
     population.append(generate_gene(matrix))
 
-# Création des enfants
-children = []
-
 for iterate in range(iterations):
+    # Création des enfants
+    children = []
     # Création des crossover
     crossover_amount = math.floor(crossover_chance*initial_population_count)
     for i in range(crossover_amount):
@@ -50,14 +54,15 @@ for iterate in range(iterations):
     next_gen = get_best_chromosoms(
         population + children, initial_population_count, matrix)
 
-    pprint.pprint(population)
-    pprint.pprint(
-        list(map(lambda item: get_gene_cost(matrix, item), population)))
-    pprint.pprint(children)
-    pprint.pprint(
-        list(map(lambda item: get_gene_cost(matrix, item), children)))
-    pprint.pprint(next_gen)
-    pprint.pprint(
-        list(map(lambda item: get_gene_cost(matrix, item), next_gen)))
-
     population = next_gen
+
+
+pprint.pprint(population)
+pprint.pprint(
+    list(map(lambda item: get_gene_cost(matrix, item), population)))
+pprint.pprint(children)
+pprint.pprint(
+    list(map(lambda item: get_gene_cost(matrix, item), children)))
+pprint.pprint(next_gen)
+pprint.pprint(
+    list(map(lambda item: get_gene_cost(matrix, item), next_gen)))
