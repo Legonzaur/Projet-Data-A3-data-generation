@@ -6,6 +6,6 @@ db = DbConnector()
 graph = Graph()
 traffic = Traffic(graph)
 
-graph.generate_graph()
+graph.generate_graph(10, 10, 9, 9)
 matrix = traffic.browse_matrix()
 db.save_graph_with_traffic(matrix)
