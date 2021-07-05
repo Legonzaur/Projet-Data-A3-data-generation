@@ -1,5 +1,5 @@
 #!/bin/bash
 
 for (( i = 10; i < $1; i++ )); do
-  ./db_seeder.py "$i" "$i" $((i - 1)) $((i - 1))
+    ./vrp_test_complete.py "$i" >> speed.txt
 done
