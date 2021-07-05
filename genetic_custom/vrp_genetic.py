@@ -52,5 +52,10 @@ def genetic(matrix, iterations, initial_population_count, random_chance, mutatio
     print({
         "exec_time": str(time.time() - start_time),
         "path_time": best_path_cost,
-        "graph_size": len(matrix)
+        "graph_size": len(matrix),
+        "iterations": iterations,
+        "initial_population_count": initial_population_count,
+        "random_chance": random_chance,
+        "mutation_chance": mutation_chance,
+        "crossover_chance": crossover_chance
     })

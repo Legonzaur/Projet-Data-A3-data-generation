@@ -11,7 +11,7 @@ iterations = int(sys.argv[1])
 initial_population_count = int(sys.argv[2])
 
 db = DbConnector()
-matrix = db.get_graph_by_length(sys.argv[3])
+matrix = db.get_graph_by_length(int(sys.argv[3]))
 
 
 startTime = time.time()
