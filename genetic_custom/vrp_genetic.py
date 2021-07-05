@@ -21,8 +21,6 @@ def genetic(matrix, iterations, initial_population_count, random_chance, mutatio
         population.append(generate_gene(matrix))
 
     for iterate in range(iterations):
-        # sys.stdout.write("\rIteration %i" % iterate)
-        # sys.stdout.flush()
         # Création des enfants
         children = []
         # Création des crossover

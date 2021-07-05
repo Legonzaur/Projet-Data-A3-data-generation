@@ -1,28 +1,19 @@
 #!/usr/bin/python
 
-import pprint
-import math
 import time
 import sys
-from bson.objectid import ObjectId
 
 from genetic_custom.vrp_genetic import genetic
 
 from db.db_connector import DbConnector
 
-# print("Obtaining graph from database. Please wait.")
-
 iterations = int(sys.argv[1])
 initial_population_count = int(sys.argv[2])
-# Complete
-graph_id = "60ded3ff2ee5a75b536b9bf6"
-# Connected
-#graph_id = "60dedca6c8735c99673b9bdb"
+
 db = DbConnector()
-matrix = db.get_graph_with_traffic(ObjectId(graph_id))
+matrix = db.get_graph_by_length(sys.argv[3])
 
 
-# print("Graph obtained")
 startTime = time.time()
 population = []
 
