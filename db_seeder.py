@@ -9,6 +9,6 @@ db = DbConnector()
 graph = Graph()
 traffic = Traffic(graph)
 
-graph.generate_graph(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+graph.generate_graph(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]))
 matrix = traffic.browse_matrix()
 db.save_graph_with_traffic(matrix)
