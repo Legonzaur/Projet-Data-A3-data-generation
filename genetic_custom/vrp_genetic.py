@@ -15,7 +15,7 @@ from genetic_custom.vrp_genetic_pick_best import get_gene_cost
 
 def genetic(matrix, iterations, initial_population_count, random_chance, mutation_chance, crossover_chance):
     # Création de la population intiale
-    startTime = time.time()
+    start_time = time.time()
     population = []
     for i in range(initial_population_count):
         population.append(generate_gene(matrix))
@@ -48,4 +48,9 @@ def genetic(matrix, iterations, initial_population_count, random_chance, mutatio
     next_gen_costs = list(
         map(lambda item: get_gene_cost(matrix, item), next_gen))
     best_path_cost = sorted(next_gen_costs)[0]
-    print({"execTime": str(time.time() - startTime), "pathTime": best_path_cost})
+
+    print({
+        "exec_time": str(time.time() - start_time),
+        "path_time": best_path_cost,
+        "graph_size": len(matrix)
+    })
