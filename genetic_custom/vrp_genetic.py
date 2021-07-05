@@ -47,4 +47,7 @@ def genetic(matrix, iterations, initial_population_count, random_chance, mutatio
 
         population = next_gen
 
-    print(str(time.time() - startTime))
+    next_gen_costs = list(
+        map(lambda item: get_gene_cost(matrix, item), next_gen))
+    best_path_cost = sorted(next_gen_costs)[0]
+    print({"execTime": str(time.time() - startTime), "pathTime": best_path_cost})
