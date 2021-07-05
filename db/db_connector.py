@@ -69,3 +69,10 @@ class DbConnector:
     def get_random_graph(self, graph_collection="graphs", traffic_collection="traffic"):
         graph_id = random.choice(list(self.db_data[graph_collection].find()))["_id"]
         return self.get_graph_with_traffic(graph_id, graph_collection, traffic_collection)
+
+    def get_graph_by_length(self, length, graph_collection="graphs", traffic_collection="traffic"):
+        graph = {
+            "size": length
+        }
+        graph_id = self.db_data[graph_collection].find_one(graph)["_id"]
+        return self.get_graph_with_traffic(graph_id, graph_collection, traffic_collection)
