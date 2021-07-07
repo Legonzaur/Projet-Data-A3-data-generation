@@ -1,0 +1,10 @@
+{'exec_time': '1.2728736400604248', 'path_time': 887.9499999999998, 'graph_size': 10, 'iterations': 1000, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.3195130825042725', 'path_time': 887.95, 'graph_size': 10, 'iterations': 1001, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.3034217357635498', 'path_time': 927.5, 'graph_size': 10, 'iterations': 1002, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.2898890972137451', 'path_time': 924.0, 'graph_size': 10, 'iterations': 1003, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.4860081672668457', 'path_time': 924.0, 'graph_size': 10, 'iterations': 1004, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.679009199142456', 'path_time': 887.95, 'graph_size': 10, 'iterations': 1005, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.2798945903778076', 'path_time': 924.0, 'graph_size': 10, 'iterations': 1006, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.3339011669158936', 'path_time': 887.95, 'graph_size': 10, 'iterations': 1007, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.2729032039642334', 'path_time': 935.8499999999999, 'graph_size': 10, 'iterations': 1008, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.2999916076660156', 'path_time': 923.9999999999999, 'graph_size': 10, 'iterations': 1009, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}

@@ -1,0 +1,8 @@
+[
+    {"exec_time": 1.2760131359100342, "path_time": 887.9499999999998, "graph_size": 10, "iterations": 1000, "initial_population_count": 8, "random_chance": 0.125, "mutation_chance": 0.5, "crossover_chance": 0.375},
+    {"exec_time": 1.3479135036468506, "path_time": 1034.6, "graph_size": 11, "iterations": 1000, "initial_population_count": 8, "random_chance": 0.125, "mutation_chance": 0.5, "crossover_chance": 0.375},
+    {"exec_time": 1.4896092414855957, "path_time": 974.2000000000002, "graph_size": 12, "iterations": 1000, "initial_population_count": 8, "random_chance": 0.125, "mutation_chance": 0.5, "crossover_chance": 0.375},
+    {"exec_time": 1.5814826488494873, "path_time": 1169.8, "graph_size": 13, "iterations": 1000, "initial_population_count": 8, "random_chance": 0.125, "mutation_chance": 0.5, "crossover_chance": 0.375},
+    {"exec_time": 2.020766496658325, "path_time": 1238.3500000000001, "graph_size": 14, "iterations": 1000, "initial_population_count": 8, "random_chance": 0.125, "mutation_chance": 0.5, "crossover_chance": 0.375},
+    {"exec_time": 1.8165388107299805, "path_time": 1905.35, "graph_size": 15, "iterations": 1000, "initial_population_count": 8, "random_chance": 0.125, "mutation_chance": 0.5, "crossover_chance": 0.375}
+]

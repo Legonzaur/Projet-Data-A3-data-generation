@@ -1,0 +1,4 @@
+{'exec_time': '1.2382426261901855', 'path_time': 887.9499999999998, 'graph_size': 10, 'iterations': 1000, 'initial_population_count': 8, 'random_chance': 0.125, 'mutation_chance': 0.5, 'crossover_chance': 0.375}
+{'exec_time': '1.9457156658172607', 'path_time': 887.9499999999998, 'graph_size': 10, 'iterations': 1000, 'initial_population_count': 9, 'random_chance': 0.1111111111111111, 'mutation_chance': 0.4444444444444444, 'crossover_chance': 0.4444444444444444}
+{'exec_time': '1.919670820236206', 'path_time': 887.95, 'graph_size': 10, 'iterations': 1000, 'initial_population_count': 10, 'random_chance': 0.1, 'mutation_chance': 0.4, 'crossover_chance': 0.5}
+{'exec_time': '2.509270668029785', 'path_time': 887.9499999999998, 'graph_size': 10, 'iterations': 1000, 'initial_population_count': 11, 'random_chance': 0.09090909090909091, 'mutation_chance': 0.36363636363636365, 'crossover_chance': 0.5454545454545454}
